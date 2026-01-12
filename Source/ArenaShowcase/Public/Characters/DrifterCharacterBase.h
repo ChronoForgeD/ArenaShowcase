@@ -6,8 +6,8 @@
 #include "GameFramework/Character.h"
 #include "DrifterCharacterBase.generated.h"
 
-UCLASS()
-class ARENASHOWCASE_API ADrifterCharacterBase : public ACharacter, IAbilitiySystemInterface
+UCLASS(Abstract)
+class ARENASHOWCASE_API ADrifterCharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -18,12 +18,5 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };
