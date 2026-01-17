@@ -22,13 +22,3 @@ void URoleComponent::BeginPlay()
 	// ...
 	
 }
-
-
-// Called every frame
-void URoleComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
