@@ -9,7 +9,10 @@ ADrifterCharacterBase::ADrifterCharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	// Adding ability system component.
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(ASCReplicationMode);
 
 }
 
@@ -19,10 +22,7 @@ void ADrifterCharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	// AbilitySystemComponent is created in the constructor. Validate it here.
-	if (AbilitySystemComponent == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AbilitySystemComponent is null on %s"), *GetName());
-	}
+	check(AbilitySystemComponent);
 }
 
 UAbilitySystemComponent* ADrifterCharacterBase::GetAbilitySystemComponent() const
@@ -34,3 +34,24 @@ UHealthComponent* ADrifterCharacterBase::GetHealthComponent() const
 {
 	return HealthComponent;
 }
+
+void ADrifterCharacterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
+}
+
+void ADrifterCharacterBase::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
+}
+

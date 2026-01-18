@@ -18,7 +18,7 @@ public class ArenaShowcase : ModuleRules
 			"StateTreeModule",
 			"GameplayStateTreeModule",
 			"UMG",
-			"Slate"
+			"Slate", "GameplayAbilities"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {"GameplayAbilities", "GameplayTags", "GameplayTasks" });

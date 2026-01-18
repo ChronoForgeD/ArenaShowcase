@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "DrifterCharacterBase.generated.h"
@@ -39,4 +40,10 @@ protected:
 	
 	virtual class UHealthComponent* GetHealthComponent() const;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySystem")
+	EGameplayEffectReplicationMode ASCReplicationMode = EGameplayEffectReplicationMode::Mixed;
+	
+	virtual void PossessedBy(AController* NewController) override;
+	
+	virtual void OnRep_PlayerState() override;
 };
