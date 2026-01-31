@@ -24,20 +24,7 @@ public class ArenaShowcase : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {"GameplayAbilities", "GameplayTags", "GameplayTasks" });
 
 		PublicIncludePaths.AddRange(new string[] {
-			"ArenaShowcase",
-			"ArenaShowcase/Variant_Platforming",
-			"ArenaShowcase/Variant_Platforming/Animation",
-			"ArenaShowcase/Variant_Combat",
-			"ArenaShowcase/Variant_Combat/AI",
-			"ArenaShowcase/Variant_Combat/Animation",
-			"ArenaShowcase/Variant_Combat/Gameplay",
-			"ArenaShowcase/Variant_Combat/Interfaces",
-			"ArenaShowcase/Variant_Combat/UI",
-			"ArenaShowcase/Variant_SideScrolling",
-			"ArenaShowcase/Variant_SideScrolling/AI",
-			"ArenaShowcase/Variant_SideScrolling/Gameplay",
-			"ArenaShowcase/Variant_SideScrolling/Interfaces",
-			"ArenaShowcase/Variant_SideScrolling/UI"
+			"ArenaShowcase"
 		});
 
 		// Uncomment if you are using Slate UI
