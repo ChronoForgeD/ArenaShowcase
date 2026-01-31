@@ -18,47 +18,8 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	MaxHealth = 100.0f;
+// Initialize health values
 	CurrentHealth = MaxHealth;
 	
-}
-
-void UHealthComponent::TakeDamage(float DamageAmount)
-{
-	CurrentHealth -= DamageAmount;
-	if (CurrentHealth <= 0.0f)
-	{
-		CurrentHealth = 0.0f;
-		// Handle death logic here (e.g., notify other components, play animations, etc.)
-	}
-}
-void UHealthComponent::ReduceMaxHealth(float ReductionAmount)
-{
-	MaxHealth -= ReductionAmount;
-	if (MaxHealth < 0.0f)
-	{
-		MaxHealth = 0.0f;
-	}
-	if (CurrentHealth > MaxHealth)
-	{
-		CurrentHealth = MaxHealth;
-	}
-}
-void UHealthComponent::Heal(float HealAmount)
-{
-	CurrentHealth += HealAmount;
-	if (CurrentHealth > MaxHealth)
-	{
-		CurrentHealth = MaxHealth;
-	}
-}
-
-// Called every frame
-void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 

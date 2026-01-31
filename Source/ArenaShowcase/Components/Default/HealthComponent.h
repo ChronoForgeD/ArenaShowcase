@@ -16,25 +16,22 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 	
-
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "DamageHandling")
+	void TakeDamage(float DamageAmount);
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "MaxHealthReductionHandling")
+	void ReduceMaxHealth(float ReductionAmount);
+	
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "HealthHealingHandling")
+	void Heal(float HealAmount);
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	// Health properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float MaxHealth;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	float CurrentHealth;
 	
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	UFUNCTION(BlueprintCallable, Category = "DamageHandling")
-	void TakeDamage(float DamageAmount);
-	
-	UFUNCTION(BlueprintCallable, Category = "MaxHealthReductionHandling")
-	void ReduceMaxHealth(float ReductionAmount);
-	
-	UFUNCTION(BlueprintCallable, Category = "HealthHealingHandling")
-	void Heal(float HealAmount);
-	
-		
 };
