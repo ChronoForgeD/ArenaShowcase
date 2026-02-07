@@ -16,14 +16,17 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 	
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "DamageHandling")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DamageHandling")
 	void TakeDamage(float DamageAmount);
 	
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "MaxHealthReductionHandling")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "MaxHealthReductionHandling")
 	void ReduceMaxHealth(float ReductionAmount);
 	
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = "HealthHealingHandling")
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "HealthHealingHandling")
 	void Heal(float HealAmount);
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DeathHandling")
+	void Death();
 	
 protected:
 	// Called when the game starts
@@ -31,7 +34,7 @@ protected:
 	// Health properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	float MaxHealth;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
 	float CurrentHealth;
 	
 };

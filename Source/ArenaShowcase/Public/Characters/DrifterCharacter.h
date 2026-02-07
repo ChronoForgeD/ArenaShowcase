@@ -13,7 +13,11 @@ UCLASS()
 class ARENASHOWCASE_API ADrifterCharacter : public ADrifterCharacterBase
 {
 	GENERATED_BODY()
-	// I am making a third person character for an arean showcase tech demo with data driven design
+	// I am making a third person character for an arena showcase tech demo with data driven design
 public:
 	
+	ADrifterCharacter();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ability")
+	void MeleeAttackSweep();
 };
