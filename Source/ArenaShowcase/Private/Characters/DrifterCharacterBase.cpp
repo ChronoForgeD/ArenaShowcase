@@ -3,6 +3,7 @@
 
 #include "Characters/DrifterCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "Components/Default/HealthComponent.h"
 
 // Sets default values
 ADrifterCharacterBase::ADrifterCharacterBase()
@@ -13,7 +14,9 @@ ADrifterCharacterBase::ADrifterCharacterBase()
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(ASCReplicationMode);
-
+	
+	// Adding health component.
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 }
 
 // Called when the game starts or when spawned

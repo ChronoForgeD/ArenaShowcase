@@ -17,7 +17,10 @@ class ARENASHOWCASE_API ADrifterCharacter : public ADrifterCharacterBase
 public:
 	
 	ADrifterCharacter();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float MeleeDamage = 20.0f;
 	
+	// Melee attack sweep function
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ability")
 	void MeleeAttackSweep();
 };

@@ -6,11 +6,10 @@
 #include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Components/Default/HealthComponent.h"
 #include "DrifterCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
-
-class UHealthComponent;
 
 UCLASS(Abstract)
 class ARENASHOWCASE_API ADrifterCharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -38,10 +37,14 @@ protected:
 
 	virtual class UAbilitySystemComponent *GetAbilitySystemComponent() const override;
 	
-	virtual class UHealthComponent* GetHealthComponent() const;
+	virtual class UHealthComponent *GetHealthComponent() const;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AbilitySystem")
 	EGameplayEffectReplicationMode ASCReplicationMode = EGameplayEffectReplicationMode::Mixed;
+	
+	// Health Replication Property
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HealthSystem")
+	EGameplayEffectReplicationMode HSCReplicationMod = EGameplayEffectReplicationMode::Mixed;
 	
 	virtual void PossessedBy(AController* NewController) override;
 	

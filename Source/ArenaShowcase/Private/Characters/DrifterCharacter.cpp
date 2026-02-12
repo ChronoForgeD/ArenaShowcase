@@ -1,10 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Characters/DrifterCharacter.h"
-
 #include "CollisionDebugDrawingPublic.h"
+#include "Engine/World.h"
+#include "Engine/OverlapResult.h"
 #include "DrawDebugHelpers.h"
+#include "Components/Default/HealthComponent.h"
 
 //Constructor
 ADrifterCharacter::ADrifterCharacter()
@@ -25,7 +26,7 @@ void ADrifterCharacter::MeleeAttackSweep_Implementation()
 	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(SphereRadius);
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this); // Ignore self
-	bool bHasOverlaps = GetWorld()->OverlapMultiByChannel(
+	bool bHasOverlaps =  GetWorld()->OverlapMultiByChannel(
 		OverlapResults,
 		Start,
 		FQuat::Identity,
@@ -33,14 +34,23 @@ void ADrifterCharacter::MeleeAttackSweep_Implementation()
 		CollisionShape,
 		QueryParams
 	);
-	
 	// Debug drawing
 	DrawDebugSphere(GetWorld(), Start, SphereRadius, 12, FColor::Red, false, 2.0f);
 	
 	for (const FOverlapResult& Result : OverlapResults)
 	{
 		AActor* OverlappedActor = Result.GetActor();
-		if (!OverlappedActor) continue;
+		if (!OverlappedActor)	continue;	
+		{
+			
+			UHealthComponent* HealthComp = OverlappedActor->FindComponentByClass<UHealthComponent>();
+			if (HealthComp)
+			{
+				float DamageAmount = MeleeDamage;  // Hardcode for now
+				HealthComp->TakeDamage(DamageAmount);
+				UE_LOG(LogTemp, Log, TEXT("Dealt %f damage to: %s"), DamageAmount, *OverlappedActor->GetName());
+			}
+		}
 
 		UE_LOG(LogTemp, Log, TEXT("Melee Attack Hit Actor: %s"), *OverlappedActor->GetName());
 	}
