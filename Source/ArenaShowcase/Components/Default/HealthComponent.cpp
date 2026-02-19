@@ -86,4 +86,6 @@ void UHealthComponent::Death_Implementation()
 		}
 		// Set lifespan to destroy the actor after a delay
 		GetOwner()->SetLifeSpan(5.0f); // Destroy the actor after 5 seconds
-}; 
+		bIsDead = true;
+		OnDeath.Broadcast();
+};

@@ -40,9 +40,13 @@ void ADrifterCharacter::MeleeAttackSweep_Implementation()
 	for (const FOverlapResult& Result : OverlapResults)
 	{
 		AActor* OverlappedActor = Result.GetActor();
-		if (!OverlappedActor)	continue;	
+		if (OverlappedActor)	
 		{
-			
+			// Cone check
+			if (FVector::DotProduct(ForwardVector, (OverlappedActor->GetActorLocation() - Start).GetSafeNormal()) < ArcAngle)
+			{
+				continue; // Not within the cone angle
+			}
 			UHealthComponent* HealthComp = OverlappedActor->FindComponentByClass<UHealthComponent>();
 			if (HealthComp)
 			{
@@ -52,6 +56,6 @@ void ADrifterCharacter::MeleeAttackSweep_Implementation()
 			}
 		}
 
-		UE_LOG(LogTemp, Log, TEXT("Melee Attack Hit Actor: %s"), *OverlappedActor->GetName());
+		
 	}
 }

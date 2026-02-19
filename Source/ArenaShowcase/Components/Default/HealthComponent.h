@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnDeath);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ARENASHOWCASE_API UHealthComponent : public UActorComponent
@@ -15,6 +16,8 @@ class ARENASHOWCASE_API UHealthComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UHealthComponent();
+	// Delegate for death event
+	FOnDeath OnDeath;
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DamageHandling")
 	void TakeDamage(float DamageAmount);
@@ -36,5 +39,6 @@ protected:
 	float MaxHealth;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
 	float CurrentHealth;
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Health")
+	bool bIsDead;
 };

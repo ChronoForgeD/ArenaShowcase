@@ -20,6 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float MeleeDamage = 20.0f;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float ArcAngle = 0.5f;
+	
 	// Melee attack sweep function
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ability")
 	void MeleeAttackSweep();
