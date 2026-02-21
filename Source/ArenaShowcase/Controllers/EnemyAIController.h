@@ -22,10 +22,10 @@ public:
 	virtual void OnPossess(APawn* InPawn) override;
 	
 	// Health Component Reference
-	UPROPERTY() UHealthComponent* HealthComponent;
+	UPROPERTY() UHealthComponent* HealthComp;
 	
 	// Run Behavior Tree
-	bool StartBehaviorTree();
+	void StartBehaviorTree();
 	
 	// On Possessed Pawn Death Function
 	UFUNCTION()
@@ -34,10 +34,8 @@ public:
 	// Behavior Tree Asset Reference
 	UPROPERTY(EditAnywhere, Category = "AI")
 	class UBehaviorTree* BTAsset;
-    	
-	// Success Flag for Starting Behavior Tree
-	bool bSuccess;
-private:
-
 	
+	// Behavior Tree Component Reference
+	UPROPERTY(VisibleAnywhere, Category = "AI")	
+	class UBehaviorTreeComponent* BTComp;
 };
