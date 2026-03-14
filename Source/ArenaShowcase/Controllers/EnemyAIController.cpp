@@ -5,6 +5,8 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "Characters/DrifterEnemyBase.h"
 #include "Components/Default/HealthComponent.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 #include "BehaviorTree/BTNode.h"
 #include "VisualLogger/VisualLogger.h"
 
@@ -26,6 +28,7 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 		HealthComp = Enemy->FindComponentByClass<UHealthComponent>();
 		if (HealthComp){
 		HealthComp->OnDeath.AddUObject(this, &AEnemyAIController::OnPossessedDeath);
+		CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
 		StartBehaviorTree();
 		}
 	}

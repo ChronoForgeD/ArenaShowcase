@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Components/Default/HealthComponent.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 #include "EnemyAIController.generated.h"
 
 /**
@@ -38,4 +40,9 @@ public:
 	// Behavior Tree Component Reference
 	UPROPERTY(VisibleAnywhere, Category = "AI")	
 	class UBehaviorTreeComponent* BTComp;
+	
+	// AI Perception Component Reference
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	class UAIPerceptionComponent* AIPerceptionComp;
+	
 };
