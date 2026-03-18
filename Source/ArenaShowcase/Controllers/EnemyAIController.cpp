@@ -7,6 +7,7 @@
 #include "Components/Default/HealthComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BTNode.h"
 #include "VisualLogger/VisualLogger.h"
 
@@ -16,7 +17,21 @@
 AEnemyAIController::AEnemyAIController()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	PerceptionComp = CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
+	UAISenseConfig_Sight* SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("SightConfig");
+	SightConfig->SightRadius = 1500.0f;
+	SightConfig->LoseSightRadius = 2000.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
+	PerceptionComp->ConfigureSense(*SightConfig);
+	PerceptionComp->SetDominantSense(UAISenseConfig_Sight::StaticClass());
+	PerceptionComp->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyAIController::OnPerceptionUpdated);
+	SetPerceptionComponent(*PerceptionComp);
 }
+
+
 
 // On Possess Function
 void AEnemyAIController::OnPossess(APawn* InPawn)
@@ -25,11 +40,12 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 	ADrifterEnemyBase* Enemy = Cast<ADrifterEnemyBase>(InPawn);
 	if (Enemy)
 	{
+		
 		HealthComp = Enemy->FindComponentByClass<UHealthComponent>();
 		if (HealthComp){
 		HealthComp->OnDeath.AddUObject(this, &AEnemyAIController::OnPossessedDeath);
-		CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
 		StartBehaviorTree();
+			BBComp = GetBlackboardComponent();
 		}
 	}
 }
@@ -70,4 +86,21 @@ void AEnemyAIController::OnPossessedDeath()
 		UnPossess();
 	}
 	
+}
+
+// On Perception Updated Function
+void AEnemyAIController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
+{
+	if (!BBComp) return;
+	// Log the Perception Update
+	UE_LOG(LogTemp, Warning, TEXT("Perception Updated: %s"), *Actor->GetName());
+	// Perception Update Handling
+	if (Actor->ActorHasTag("Player") && Stimulus.WasSuccessfullySensed())
+	{
+		BBComp->SetValueAsObject("Player", Actor);
+	}
+	else if (Actor->ActorHasTag("Player") && !Stimulus.WasSuccessfullySensed())
+	{
+		BBComp->ClearValue("Player");
+	}
 }

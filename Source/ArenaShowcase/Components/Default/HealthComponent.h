@@ -19,6 +19,9 @@ public:
 	// Delegate for death event
 	FOnDeath OnDeath;
 	
+	// Public Getter for bIsDead
+	bool IsDead() const { return bIsDead; }
+	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DamageHandling")
 	void TakeDamage(float DamageAmount);
 	
@@ -30,6 +33,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "DeathHandling")
 	void Death();
+	
+	UFUNCTION()
+	void ResetHealth();
 	
 protected:
 	// Called when the game starts

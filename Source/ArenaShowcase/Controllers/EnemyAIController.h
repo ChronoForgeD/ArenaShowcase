@@ -12,6 +12,7 @@
 /**
  * 
  */
+
 UCLASS()
 class ARENASHOWCASE_API AEnemyAIController : public AAIController
 {
@@ -23,8 +24,14 @@ public:
 	// On Possess Grab the Health Component Owner and Cache it and bind the Death Delegate to the OnPawnDeath function
 	virtual void OnPossess(APawn* InPawn) override;
 	
-	// Health Component Reference
+	// Health Component Pointer
 	UPROPERTY() UHealthComponent* HealthComp;
+	
+	// Perception Component Pointer
+	UPROPERTY() UAIPerceptionComponent* PerceptionComp;
+	
+	//Blackboard Component Pointer
+	UPROPERTY() UBlackboardComponent* BBComp;
 	
 	// Run Behavior Tree
 	void StartBehaviorTree();
@@ -41,8 +48,10 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "AI")	
 	class UBehaviorTreeComponent* BTComp;
 	
-	// AI Perception Component Reference
-	UPROPERTY(VisibleAnywhere, Category = "AI")
-	class UAIPerceptionComponent* AIPerceptionComp;
+	// AI Sight Perception Config
+	
+	
+	UFUNCTION()
+	void OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 	
 };

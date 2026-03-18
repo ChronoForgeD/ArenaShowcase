@@ -39,6 +39,7 @@ void UHealthComponent::Heal_Implementation(float HealAmount)
 // Take damage function
 void UHealthComponent::TakeDamage_Implementation(float DamageAmount)
 {
+	if (bIsDead) return;
 	CurrentHealth = FMath::Max(CurrentHealth - DamageAmount, 0.0f);
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Damage Taken, Health Remaining: %f."), CurrentHealth));
 	// Death Handling
@@ -89,3 +90,10 @@ void UHealthComponent::Death_Implementation()
 		bIsDead = true;
 		OnDeath.Broadcast();
 };
+
+// Reset Health Function
+void UHealthComponent::ResetHealth()
+{
+	CurrentHealth = MaxHealth;
+	bIsDead = false;
+}
