@@ -6,6 +6,9 @@
 #include "Engine/World.h"
 #include "Engine/OverlapResult.h"
 #include "Components/Default/HealthComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "CoreHeaders/CombatTypes.h"
 
 // Constructor
@@ -64,4 +67,36 @@ void ADrifterEnemyBase::AttackPlayer_Implementation()
 			}
 		}
 	}
+}
+
+void ADrifterEnemyBase::ResetEnemy()
+{
+	// Reset health, position, state, etc. for object pooling reuse
+	// Reset health to max
+	UHealthComponent* HealthComp = FindComponentByClass<UHealthComponent>();
+	if (HealthComp)
+	{
+		HealthComp->ResetHealth();
+	}
+	
+	// Reset other states as needed (e.g., bIsMidAttack)
+	bIsMidAttack = false;
+	
+	// Optionally reset position or other properties here
+	
+	if (GetMesh())
+	{
+		GetMesh()->SetSimulatePhysics(false);
+		GetMesh()->SetCollisionProfileName(TEXT("CharacterMesh"));
+		GetMesh()->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	}
+		
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	SpawnDefaultController() ; // Respawn AI controller if needed
+	SetLifeSpan(0); // Reset lifespan in case it was set to auto-destroy
 }

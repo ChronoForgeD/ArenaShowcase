@@ -2,6 +2,8 @@
 
 #include "Components/Default/HealthComponent.h"
 #include "Engine/Engine.h" // For GEngine debug messages
+#include "TimerManager.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/MovementComponent.h"
@@ -41,6 +43,7 @@ void UHealthComponent::TakeDamage_Implementation(float DamageAmount)
 {
 	if (bIsDead) return;
 	CurrentHealth = FMath::Max(CurrentHealth - DamageAmount, 0.0f);
+	PlayHitReaction();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("Damage Taken, Health Remaining: %f."), CurrentHealth));
 	// Death Handling
 	if (CurrentHealth <= 0)
@@ -67,7 +70,7 @@ void UHealthComponent::ReduceMaxHealth_Implementation(float ReductionAmount)
 void UHealthComponent::Death_Implementation()
 {
 	// This function can be overridden in Blueprints for custom death behavior
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Enemy is Dead"));
+		UE_LOG(LogTemp, Warning, TEXT("%s is Dead"), *GetOwner()->GetName());
 		USkeletalMeshComponent* Mesh = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
 		if (Mesh)
 		{
@@ -87,7 +90,9 @@ void UHealthComponent::Death_Implementation()
 		}
 		// Set lifespan to destroy the actor after a delay
 		GetOwner()->SetLifeSpan(5.0f); // Destroy the actor after 5 seconds
+		UE_LOG(LogTemp, Warning, TEXT("Setting bIsDead to TRUE for: %s"), *GetOwner()->GetName());
 		bIsDead = true;
+		UE_LOG(LogTemp, Warning, TEXT("About to broadcast OnDeath for %s, listeners: %d"), *GetOwner()->GetName(), OnDeath.IsBound() ? 1 : 0);
 		OnDeath.Broadcast();
 };
 
@@ -96,4 +101,41 @@ void UHealthComponent::ResetHealth()
 {
 	CurrentHealth = MaxHealth;
 	bIsDead = false;
+	UE_LOG(LogTemp, Warning, TEXT("ResetHealth called, setting bIsDead to FALSE"));
+}
+
+// Hit Flash Function
+void UHealthComponent::PlayHitReaction_Implementation()
+{
+	UMeshComponent* MeshComp = GetOwner()->FindComponentByClass<UMeshComponent>();
+	if (MeshComp)
+	{
+		if (!OriginalMaterial)
+		{
+			OriginalMaterial = MeshComp->GetMaterial(0);
+		}
+		if (!FlashMaterial)
+		{
+			FlashMaterial = UMaterialInstanceDynamic::Create(FlashBaseMaterial, this);
+			FlashMaterial->SetVectorParameterValue(FName("FlashColor"), FlashColor);
+		}
+		MeshComp->SetMaterial(0, FlashMaterial);
+		if (FlashMaterial)
+		{
+			GetWorld()->GetTimerManager().SetTimer(HitReactionFlashTimer, this, &UHealthComponent::ResetFlash, FlashDuration, false);
+		}
+	}
+}
+
+// Reset Hit Flash
+void UHealthComponent::ResetFlash_Implementation()
+{
+	UMeshComponent* MeshComp = GetOwner()->FindComponentByClass<UMeshComponent>();
+	if (FlashMaterial)
+	{
+		if (MeshComp)
+		{
+			MeshComp->SetMaterial(0, OriginalMaterial);
+		}
+	}
 }

@@ -30,4 +30,8 @@ class ARENASHOWCASE_API ADrifterEnemyBase : public ADrifterCharacterBase
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Combat")
 	void AttackPlayer();
 	
+	// Enemy Reset for Object Pooling Recycling Function
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ResetEnemy();
+	
 };

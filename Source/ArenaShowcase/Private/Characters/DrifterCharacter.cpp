@@ -31,7 +31,7 @@ void ADrifterCharacter::BeginPlay()
 	if (HealthComp)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Health Component Found, Binding Death Delegate"));
-		HealthComp->OnDeath.AddUObject(this, &ADrifterCharacter::OnPlayerDeath);
+		HealthComp->OnDeath.AddDynamic(this, &ADrifterCharacter::OnPlayerDeath);
 	}
 	else
 	{
@@ -61,13 +61,18 @@ void ADrifterCharacter::OnPlayerDeath()
 // RespawnPlayer Function
 void ADrifterCharacter::RespawnPlayer()
 {
+	
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (PC)
 	{
 		PC->EnableInput(PC);
 	}
 		// Reset Health
-		GetHealthComponent()->ResetHealth();
+	UHealthComponent* HealthComp = FindComponentByClass<UHealthComponent>();
+	if (HealthComp)
+	{
+		HealthComp->ResetHealth();
+	}
 		
 		if (GetMesh())
 		{
@@ -85,6 +90,7 @@ void ADrifterCharacter::RespawnPlayer()
 	// Spawn Player
     		FVector SpawnLocation = FVector(0.0f, 0.0f, 300.0f);
     		SetActorLocation(SpawnLocation); // Move to spawn location
+			UE_LOG(LogTemp, Warning, TEXT("RespawnPlayer called"));
 }
 
 // Melee attack sweep implementation
@@ -137,6 +143,14 @@ void ADrifterCharacter::MeleeAttackSweep_Implementation(FAttackStruct AttackData
 	
 	void ADrifterCharacter::ComboAttack_Implementation()
 	{
+	UE_LOG(LogTemp, Warning, TEXT("ComboAttack called"));
+	UHealthComponent* HealthComp = FindComponentByClass<UHealthComponent>();
+	if (HealthComp && HealthComp->IsDead())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player is dead, blocking attack"));
+		return;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Player is alive, proceeding with combo"));
 		if (bIsMidAttack) return; // busy, ignore input
 		
 			if (!bIsInCombo)

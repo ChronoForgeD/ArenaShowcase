@@ -43,7 +43,7 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 		
 		HealthComp = Enemy->FindComponentByClass<UHealthComponent>();
 		if (HealthComp){
-		HealthComp->OnDeath.AddUObject(this, &AEnemyAIController::OnPossessedDeath);
+		HealthComp->OnDeath.AddDynamic(this, &AEnemyAIController::OnPossessedDeath);
 		StartBehaviorTree();
 			BBComp = GetBlackboardComponent();
 		}
